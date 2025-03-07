@@ -1,0 +1,268 @@
+/* Reset some default styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Dark Mode Toggle Button Styles */
+#darkModeToggle {
+  position: relative; /* Fixed position to keep the button at the top-right corner */
+  top: 20px; /* Distance from the top */
+   /* Distance from the right */
+  padding: 8px 15px; /* Adjust padding to make the button smaller */
+  font-size: 16px; /* Adjust font size to make the button smaller */
+  background-color: #5e5df0; /* Button color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  z-index: 1000; /* Ensure the button stays on top of other elements */
+}
+
+#darkModeToggle:hover {
+  background-color: #4c4ae0; /* Darker shade on hover */
+  transform: scale(1.1); /* Slight zoom effect when hovered */
+}
+
+#darkModeToggle:focus {
+  outline: none; /* Removes focus outline for a cleaner look */
+}
+
+
+
+/* Set a light background and text color (Default Light Mode) */
+body {
+  font-family: 'Arial', sans-serif;
+  background: #f4f7fc;
+  color: #333;
+  padding: 20px;
+}
+
+/* Dark mode styles */
+body.dark-mode {
+  background: #121212;
+  color: #e0e0e0;
+}
+
+/* Logo container */
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px; /* Spacing between logos */
+  margin-bottom: 15px;
+}
+
+/* Logo images */
+.logo {
+  width: 80px; /* Adjust logo size */
+  height: auto;
+}
+
+/* Container for the page */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark Mode Container */
+body.dark-mode .container {
+  background: #1f1f1f;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Header section */
+header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+header h1 {
+  font-size: 36px;
+  color: #5e5df0;
+  margin-bottom: 10px;
+}
+
+header p {
+  font-size: 18px;
+  color: #666;
+}
+
+/* Dark Mode Header */
+body.dark-mode header h1 {
+  color: #ffffff;
+}
+
+body.dark-mode header p {
+  color: #b0b0b0;
+}
+
+/* Form container */
+.form-container {
+  background-color: #fafbff;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark Mode Form */
+body.dark-mode .form-container {
+  background-color: #2a2a2a;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Form group styling */
+.form-container .form-group {
+  margin-bottom: 20px;
+}
+
+.form-container label {
+  font-weight: bold;
+  display: block;
+  color: #333;
+}
+
+/* Dark Mode Labels */
+body.dark-mode .form-container label {
+  color: #e0e0e0;
+}
+
+/* Form input styles */
+.form-container input,
+.form-container textarea,
+.form-container select {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  margin-top: 8px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+/* Dark Mode Inputs */
+body.dark-mode .form-container input,
+body.dark-mode .form-container textarea,
+body.dark-mode .form-container select {
+  background-color: #333333;
+  color: #ffffff;
+  border: 2px solid #444;
+}
+
+/* Button styles */
+button {
+  background-color: #5e5df0;
+  color: white;
+  padding: 15px 30px;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+/* Dark Mode Button */
+body.dark-mode button {
+  background-color: #007bff;
+}
+
+body.dark-mode button:hover {
+  background-color: #0056b3;
+}
+
+/* Results container */
+.results-container {
+  margin-top: 40px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: none;
+}
+
+/* Dark Mode Results */
+body.dark-mode .results-container {
+  background: #2a2a2a;
+}
+
+/* Loading spinner */
+#loading {
+  display: none;
+  text-align: center;
+}
+
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #5e5df0;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Results text */
+#results {
+  margin-top: 20px;
+  font-size: 16px;
+  color: #333;
+}
+
+/* Dark Mode Results Text */
+body.dark-mode #results {
+  color: #e0e0e0;
+}
+
+/* Button to copy to clipboard */
+button#copyBtn {
+  background-color: #4CAF50;
+  margin-top: 20px;
+  padding: 12px 20px;
+}
+
+button#copyBtn:hover {
+  background-color: #45a049;
+}
+
+/* Dark Mode Copy Button */
+body.dark-mode button#copyBtn {
+  background-color: #4CAF50;
+}
+
+body.dark-mode button#copyBtn:hover {
+  background-color: #45a049;
+}
+
+/* Error messages */
+.error {
+  color: red;
+  font-size: 16px;
+}
+
+/* Adjust for smaller screens */
+@media screen and (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+
+  .form-container {
+    padding: 20px;
+  }
+
+  button {
+    font-size: 16px;
+  }
+}

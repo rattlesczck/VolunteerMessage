@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Volunteer Recruitment Message Generator</title>
+    <link rel="stylesheet" href="../static/styles.css" />
+  </head>
+  <body>
+    <!-- Dark Mode Toggle Button -->
+    
+
+
+    <header>
+      <div class="logo-container">
+        <img src="../static/IVIS_logo.png" alt="Logo 1" class="logo" />
+        <img src="../static/NIE_University.png" alt="Logo 2" class="logo" />
+        <img src="static/PULSE LOGO.png" alt="Logo 3" class="logo" />
+      </div>
+      <h1>Volunteer Recruitment Message Generator</h1>
+      <p>
+        Create engaging and impactful volunteer recruitment messages tailored
+        to your organization.
+      </p>
+    </header>
+    <button id="darkModeToggle">🌙</button>
+    <div class="form-container">
+      <form id="messageForm">
+        <div class="form-group">
+          <label for="organization_name">Organization Name:</label>
+          <input
+            type="text"
+            id="organization_name"
+            name="organization_name"
+            required
+            placeholder="e.g., Green Earth Initiative"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="mission">Mission Statement:</label>
+          <textarea
+            id="mission"
+            name="mission"
+            required
+            placeholder="Describe the mission of your organization..."
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="niche">Community Focus Area:</label>
+          <input
+            type="text"
+            id="niche"
+            name="niche"
+            required
+            placeholder="e.g., animal welfare, education, disaster relief"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="target_audience">Target Audience:</label>
+          <input
+            type="text"
+            id="target_audience"
+            name="target_audience"
+            placeholder="e.g., students, professionals, retirees"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="roles">Volunteer Roles & Responsibilities:</label>
+          <textarea
+            id="roles"
+            name="roles"
+            required
+            placeholder="List the key roles and responsibilities for volunteers..."
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="num_messages">Number of Messages:</label>
+          <select id="num_messages" name="num_messages">
+            <option value="1">1</option>
+            <option value="3" selected>3</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="tone">Message Tone:</label>
+          <select id="tone" name="tone">
+            <option value="professional" selected>Professional</option>
+            <option value="casual">Casual</option>
+            <option value="inspirational">Inspirational</option>
+            <option value="motivational">Motivational</option>
+            <option value="friendly">Friendly</option>
+          </select>
+        </div>
+
+        <div class="form-group checkbox">
+          <input
+            type="checkbox"
+            id="include_outline"
+            name="include_outline"
+            checked
+          />
+          <label for="include_outline">Include Volunteer Role Outline</label>
+        </div>
+
+        <div class="form-group">
+          <label for="model">LLM Model:</label>
+          <select id="model" name="model"></select>
+        </div>
+
+        <button type="submit" id="generateBtn">Generate Messages</button>
+      </form>
+    </div>
+
+    <div
+      class="results-container"
+      id="resultsContainer"
+      style="display: none"
+    >
+      <h2>Your Volunteer Recruitment Messages</h2>
+      <div id="loading" style="display: none">
+        <div class="spinner"></div>
+        <p>Generating messages...</p>
+      </div>
+      <div id="results"></div>
+      <button id="copyBtn">Copy to Clipboard</button>
+    </div>
+
+    <script>
+      const formatResponseWithMarkdown = (text) => {
+        // Ensure the input text is a valid string
+        if (typeof text !== 'string') {
+          console.error('Invalid input: text must be a string');
+          return '';
+        }
+
+        let formatted = text.replace(/\n/g, "<br>");
+        formatted = formatted.replace(
+          /#{1,6}\s+(.*?)(?:<br>|$)/g,
+          "<h3>$1</h3>"
+        );
+        formatted = formatted.replace(
+          /(\d+\.\s+)(.*?)(?:<br>|$)/g,
+          '<div class="list-item"><span class="list-number">$1</span>$2</div>'
+        );
+        formatted = formatted.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+        formatted = formatted.replace(/\*(.*?)\*/g, "<em>$1</em>");
+        
+        return formatted;
+      };
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        try {
+          const response = await fetch("/models");
+          const data = await response.json();
+          const modelSelect = document.getElementById("model");
+          modelSelect.innerHTML = "";
+          data.models.forEach((model) => {
+            const option = document.createElement("option");
+            option.value = model;
+            option.textContent = model;
+            modelSelect.appendChild(option);
+          });
+        } catch (error) {
+          console.error("Error fetching models:", error);
+        }
+      });
+
+      document.getElementById("messageForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(e.target);
+        const resultsContainer = document.getElementById("resultsContainer");
+        const loading = document.getElementById("loading");
+        const results = document.getElementById("results");
+
+        resultsContainer.style.display = "block";
+        loading.style.display = "block";
+        results.innerHTML = "";
+
+        try {
+          const response = await fetch("/generate", {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!response.ok) {
+            throw new Error(`Error: ${response.statusText}`);
+          }
+
+          const data = await response.json();
+          if (data.generated_ideas) {
+            results.innerHTML = formatResponseWithMarkdown(data.generated_ideas);
+          } else {
+            results.innerHTML = `<div class="error">No generated ideas found.</div>`;
+          }
+        } catch (error) {
+          results.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+        } finally {
+          loading.style.display = "none";
+        }
+      });
+
+      document.getElementById("copyBtn").addEventListener("click", () => {
+        const results = document.getElementById("results").innerText;
+        navigator.clipboard
+          .writeText(results)
+          .then(() => {
+            const copyBtn = document.getElementById("copyBtn");
+            copyBtn.textContent = "Copied!";
+            setTimeout(() => {
+              copyBtn.textContent = "Copy to Clipboard";
+            }, 2000);
+          })
+          .catch((err) => {
+            console.error("Failed to copy: ", err);
+          });
+      });
+
+      // Dark Mode Toggle Functionality
+      document.getElementById('darkModeToggle').addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+      });
+    </script>
+  </body>
+</html>
